@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * A simple client that requests a greeting from the {@link HelloWorldServer}.
  */
 public class HelloWorldClient {
-    private static final Logger logger = Logger.getLogger(HelloWorldClient.class.getName());
+    private static final Logger LOG = Logger.getLogger(HelloWorldClient.class.getName());
 
     private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
@@ -28,16 +28,16 @@ public class HelloWorldClient {
 
     /** Say hello to server. */
     public void greet(String name) {
-        logger.info("Will try to greet " + name + " ...");
+        LOG.info("Will try to greet " + name + " ...");
         HelloRequest request = HelloRequest.newBuilder().setName(name).build();
         HelloReply response;
         try {
             response = blockingStub.sayHello(request);
         } catch (StatusRuntimeException e) {
-            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            LOG.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
             return;
         }
-        logger.info("Greeting: " + response.getMessage());
+        LOG.info("Greeting: " + response.getMessage());
     }
 
     /**
@@ -47,7 +47,7 @@ public class HelloWorldClient {
     public static void main(String[] args) throws Exception {
         String user = "world";
         // Access a service running on the local machine on port 50051
-        String target = "localhost:50051";
+        String target = "localhost:" + GrpcPort.STRING_VALUE;
         // Allow passing in the user and target strings as command line arguments
         if (args.length > 0) {
             if ("--help".equals(args[0])) {
