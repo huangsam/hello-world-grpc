@@ -10,13 +10,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
- * Server that manages startup/shutdown of a {@code Greeter} server.
+ * Server that manages startup/shutdown for {@link GreeterImpl} logic.
  */
 public class HelloWorldServer {
     private static final Logger LOG = Logger.getLogger(HelloWorldServer.class.getName());
 
     private Server server;
 
+    /**
+     * Starts the gRPC server instance tied to this class.
+     */
     private void start() throws IOException {
         /* The port on which the server should run */
         int port = GrpcPort.INT_VALUE;
@@ -37,6 +40,9 @@ public class HelloWorldServer {
         }));
     }
 
+    /**
+     * Stops the gRPC server instance tied to this class.
+     */
     private void stop() throws InterruptedException {
         if (server != null) {
             server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
