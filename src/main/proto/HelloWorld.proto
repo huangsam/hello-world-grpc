@@ -22,4 +22,13 @@ message HelloRequest {
 // The response message containing the greetings
 message HelloReply {
   string message = 1;
+  REPLY_INTENT intent = 2;
+
+  enum REPLY_INTENT {
+    WELCOME = 0;
+    QUERY = 1;
+    ASK_OUT = 2;
+    GOOD_WISH = 3;
+    REJECT = 4;
+  }
 }

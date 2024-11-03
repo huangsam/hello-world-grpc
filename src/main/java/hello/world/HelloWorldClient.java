@@ -34,10 +34,10 @@ public class HelloWorldClient {
         try {
             response = blockingStub.sayHello(request);
         } catch (StatusRuntimeException e) {
-            LOG.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+            LOG.log(Level.WARNING, "[Failure] {0}", e.getStatus());
             return;
         }
-        LOG.info("RPC success: " + response.getMessage());
+        LOG.info("[Success] Got message '" + response.getMessage() + "' with intent " + response.getIntent());
     }
 
     /**

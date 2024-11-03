@@ -67,7 +67,10 @@ public class HelloWorldServer {
 
         @Override
         public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
-            HelloReply reply = HelloReply.newBuilder().setMessage(processMessage(req)).build();
+            HelloReply reply = HelloReply.newBuilder()
+                    .setMessage(processMessage(req))
+                    .setIntent(HelloReply.REPLY_INTENT.WELCOME)
+                    .build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }
