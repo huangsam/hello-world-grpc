@@ -16,15 +16,15 @@ import java.util.logging.Logger;
 public class HelloWorldClient {
     private static final Logger LOG = Logger.getLogger(HelloWorldClient.class.getName());
 
+    // Access a service running on the local machine on port 50051
+    private static final String TARGET = "localhost:" + GrpcPort.STRING_VALUE;
+
     private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
     /**
      * Construct client for accessing HelloWorld server using the existing channel.
      */
-    public HelloWorldClient(Channel channel) {
-        // 'channel' here is a Channel, not a ManagedChannel, so it is not this code's responsibility to
-        // shut it down.
-
+    private HelloWorldClient(Channel channel) {
         // Passing Channels to code makes code easier to test and makes it easier to reuse Channels.
         blockingStub = GreeterGrpc.newBlockingStub(channel);
     }
@@ -32,7 +32,7 @@ public class HelloWorldClient {
     /**
      * Say hello to server.
      */
-    public void greet(String name, int age) {
+    private void greet(String name, int age) {
         LOG.info("Attempt to greet " + name + " via " + HelloWorldServer.class.getName());
         HelloRequest.Builder requestBuilder = HelloRequest.newBuilder().setName(name);
         if (age >= 0) {
@@ -50,44 +50,35 @@ public class HelloWorldClient {
 
     /**
      * Greet server. If provided, the first element of {@code args} is the name to use in the
-     * greeting. The second argument is the target server.
+     * greeting. The second argument is the age to use in the greeting.
      */
     public static void main(String[] args) throws Exception {
         String user = "world";
-        // Access a service running on the local machine on port 50051
-        String target = "localhost:" + GrpcPort.STRING_VALUE;
-        // Allow passing in the user and target strings as command line arguments
+
+        int age = -1;
+
         if (args.length > 0) {
             if ("--help".equals(args[0])) {
                 System.err.printf("""
-                        Usage: [name [target]]
+                        Usage: [name [age]]
 
                         name    The name you wish to be greeted by. Defaults to %s
-                        target  The server to connect to. Defaults to %s
-                        """, user, target);
+                        age     The age you wish to be greeted by. Defaults to %d
+                        """, user, age);
                 System.exit(1);
             }
             user = args[0];
         }
         if (args.length > 1) {
-            target = args[1];
+            age = Integer.parseInt(args[1]);
         }
 
-        // Create a communication channel to the server, known as a Channel. Channels are thread-safe
-        // and reusable. It is common to create channels at the beginning of your application and reuse
-        // them until the application shuts down.
-        //
-        // For the example we use plaintext insecure credentials to avoid needing TLS certificates. To
-        // use TLS, use TlsChannelCredentials instead.
-        ManagedChannel channel = Grpc.newChannelBuilder(target, InsecureChannelCredentials.create())
-                .build();
+        // Use plaintext insecure credentials to avoid needing TLS certificates
+        ManagedChannel channel = Grpc.newChannelBuilder(TARGET, InsecureChannelCredentials.create()).build();
         try {
             HelloWorldClient client = new HelloWorldClient(channel);
-            client.greet(user, 18);
+            client.greet(user, age);
         } finally {
-            // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
-            // resources the channel should be shut down when it will no longer be used. If it may be used
-            // again leave it running.
             channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         }
     }
