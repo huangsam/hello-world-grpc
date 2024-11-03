@@ -13,15 +13,21 @@ service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
 }
 
-// The request message containing the user's name.
+// The request payload for a hello-like message
 message HelloRequest {
+  // Name of the person who said hello
   string name = 1;
-  int32 age = 2;
+
+  // Age of the person who said hello (optional)
+  int32 age = 10;
 }
 
-// The response message containing the greetings
+// The response payload for a hello-like message
 message HelloReply {
+  // Raw content of the response that was returned back
   string message = 1;
+
+  // Server intent behind the response
   REPLY_INTENT intent = 2;
 
   enum REPLY_INTENT {

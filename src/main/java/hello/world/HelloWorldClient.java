@@ -34,13 +34,13 @@ public class HelloWorldClient {
      */
     public void greet(String name, int age) {
         LOG.info("Attempt to greet " + name + " via " + HelloWorldServer.class.getName());
-        HelloRequest request = HelloRequest.newBuilder()
-                .setName(name)
-                .setAge(age)
-                .build();
+        HelloRequest.Builder requestBuilder = HelloRequest.newBuilder().setName(name);
+        if (age >= 0) {
+            requestBuilder.setAge(age);
+        }
         HelloReply response;
         try {
-            response = blockingStub.sayHello(request);
+            response = blockingStub.sayHello(requestBuilder.build());
         } catch (StatusRuntimeException e) {
             LOG.log(Level.WARNING, "[Failure] {0}", e.getStatus());
             return;
