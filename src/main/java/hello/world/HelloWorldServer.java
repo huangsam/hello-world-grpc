@@ -98,11 +98,7 @@ public class HelloWorldServer {
         public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
             HelloReply.REPLY_INTENT intent = processIntent(req);
             String message = processMessage(req, intent);
-            HelloReply.Builder replyBuilder = HelloReply.newBuilder();
-            HelloReply reply = replyBuilder
-                    .setMessage(message)
-                    .setIntent(intent)
-                    .build();
+            HelloReply reply = HelloReply.newBuilder().setMessage(message).setIntent(intent).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }
