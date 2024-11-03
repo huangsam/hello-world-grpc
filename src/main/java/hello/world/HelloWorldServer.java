@@ -61,10 +61,13 @@ public class HelloWorldServer {
     }
 
     static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
+        private String processMessage(HelloRequest req) {
+            return "Hello " + req.getName() + "! " + "You are " + req.getAge() + " years old.";
+        }
 
         @Override
         public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
-            HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
+            HelloReply reply = HelloReply.newBuilder().setMessage(processMessage(req)).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }

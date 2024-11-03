@@ -27,9 +27,9 @@ public class HelloWorldClient {
     }
 
     /** Say hello to server. */
-    public void greet(String name) {
-        LOG.info("Will try to greet " + name + " ...");
-        HelloRequest request = HelloRequest.newBuilder().setName(name).build();
+    public void greet(String name, int age) {
+        LOG.info("Attempt to greet " + name + " via " + HelloWorldServer.class.getName());
+        HelloRequest request = HelloRequest.newBuilder().setName(name).setAge(age).build();
         HelloReply response;
         try {
             response = blockingStub.sayHello(request);
@@ -37,7 +37,7 @@ public class HelloWorldClient {
             LOG.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
             return;
         }
-        LOG.info("Greeting: " + response.getMessage());
+        LOG.info("RPC success: " + response.getMessage());
     }
 
     /**
@@ -75,7 +75,7 @@ public class HelloWorldClient {
                 .build();
         try {
             HelloWorldClient client = new HelloWorldClient(channel);
-            client.greet(user);
+            client.greet(user, 10);
         } finally {
             // ManagedChannels use resources like threads and TCP connections. To prevent leaking these
             // resources the channel should be shut down when it will no longer be used. If it may be used
