@@ -29,7 +29,10 @@ public class HelloWorldClient {
     /** Say hello to server. */
     public void greet(String name, int age) {
         LOG.info("Attempt to greet " + name + " via " + HelloWorldServer.class.getName());
-        HelloRequest request = HelloRequest.newBuilder().setName(name).setAge(age).build();
+        HelloRequest request = HelloRequest.newBuilder()
+                .setName(name)
+                .setAge(age)
+                .build();
         HelloReply response;
         try {
             response = blockingStub.sayHello(request);
