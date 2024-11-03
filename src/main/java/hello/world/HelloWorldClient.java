@@ -5,6 +5,7 @@ import io.grpc.Grpc;
 import io.grpc.InsecureChannelCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.StatusRuntimeException;
+
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +18,9 @@ public class HelloWorldClient {
 
     private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
-    /** Construct client for accessing HelloWorld server using the existing channel. */
+    /**
+     * Construct client for accessing HelloWorld server using the existing channel.
+     */
     public HelloWorldClient(Channel channel) {
         // 'channel' here is a Channel, not a ManagedChannel, so it is not this code's responsibility to
         // shut it down.
@@ -26,7 +29,9 @@ public class HelloWorldClient {
         blockingStub = GreeterGrpc.newBlockingStub(channel);
     }
 
-    /** Say hello to server. */
+    /**
+     * Say hello to server.
+     */
     public void greet(String name, int age) {
         LOG.info("Attempt to greet " + name + " via " + HelloWorldServer.class.getName());
         HelloRequest request = HelloRequest.newBuilder()
