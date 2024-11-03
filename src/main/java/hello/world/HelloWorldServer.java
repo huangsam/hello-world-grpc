@@ -61,15 +61,38 @@ public class HelloWorldServer {
     }
 
     static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
-        private String processMessage(HelloRequest req) {
-            return "Hello " + req.getName() + "! " + "You are " + req.getAge() + " years old.";
+        private HelloReply.REPLY_INTENT processIntent(HelloRequest req) {
+            if (req.getName().contains("Hitler")) {
+                return HelloReply.REPLY_INTENT.REJECT;
+            } else if (req.getAge() < 10) {
+                return HelloReply.REPLY_INTENT.GOOD_WISH;
+            } else if (req.getAge() < 18) {
+                return HelloReply.REPLY_INTENT.QUERY;
+            } else if (req.getAge() < 40) {
+                return HelloReply.REPLY_INTENT.ASK_OUT;
+            }
+            return HelloReply.REPLY_INTENT.WELCOME;
+        }
+
+        private String processMessage(HelloRequest req, HelloReply.REPLY_INTENT intent) {
+            return switch (intent) {
+                case WELCOME -> "Hello " + req.getName() + "! " + "You are " + req.getAge() + " years old.";
+                case QUERY -> "Good seeing you " + req.getName() + ". How is school treating you?";
+                case ASK_OUT -> "Hey " + req.getName() + "! Can we go on a date?";
+                case GOOD_WISH -> "Hey little " + req.getName() + " - continue to grow and prosper";
+                case REJECT -> "Um...see you later " + req.getName() + "...";
+                case UNRECOGNIZED -> "There is nothing for you to see " + req.getName() + ".";
+            };
         }
 
         @Override
         public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
-            HelloReply reply = HelloReply.newBuilder()
-                    .setMessage(processMessage(req))
-                    .setIntent(HelloReply.REPLY_INTENT.WELCOME)
+            HelloReply.REPLY_INTENT intent = processIntent(req);
+            String message = processMessage(req, intent);
+            HelloReply.Builder replyBuilder = HelloReply.newBuilder();
+            HelloReply reply = replyBuilder
+                    .setMessage(message)
+                    .setIntent(intent)
                     .build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
