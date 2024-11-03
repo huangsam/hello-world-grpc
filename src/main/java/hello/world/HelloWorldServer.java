@@ -71,6 +71,8 @@ public class HelloWorldServer {
         private HelloReply.REPLY_INTENT processIntent(HelloRequest req) {
             if (req.getName().contains("Hitler")) {
                 return HelloReply.REPLY_INTENT.REJECT;
+            } else if (req.getAge() < 0) { // Raises IllegalArgumentException since the value is fake
+                return HelloReply.REPLY_INTENT.UNRECOGNIZED;
             } else if (req.getAge() < 10) {
                 return HelloReply.REPLY_INTENT.GOOD_WISH;
             } else if (req.getAge() < 18) {
