@@ -68,6 +68,9 @@ public class HelloWorldServer {
     }
 
     static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
+        /**
+         * Process intent based on the request at hand.
+         */
         private HelloReply.REPLY_INTENT processIntent(HelloRequest req) {
             if (req.getName().contains("Hitler")) {
                 return HelloReply.REPLY_INTENT.REJECT;
@@ -83,6 +86,9 @@ public class HelloWorldServer {
             return HelloReply.REPLY_INTENT.WELCOME;
         }
 
+        /**
+         * Process message with request payload, based on the intent at hand.
+         */
         private String processMessage(HelloRequest req, HelloReply.REPLY_INTENT intent) {
             return switch (intent) {
                 case WELCOME -> "Hello " + req.getName() + "! " + "You are " + req.getAge() + " years old.";
