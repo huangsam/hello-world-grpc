@@ -21,13 +21,11 @@ public class HelloWorldServer {
      * Starts the gRPC server instance tied to this class.
      */
     private void start() throws IOException {
-        /* The port on which the server should run */
-        int port = GrpcPort.INT_VALUE;
-        server = Grpc.newServerBuilderForPort(port, InsecureServerCredentials.create())
+        server = Grpc.newServerBuilderForPort(GrpcPort.DEFAULT, InsecureServerCredentials.create())
                 .addService(new GreeterImpl())
                 .build()
                 .start();
-        LOG.info("Server started, listening on " + port);
+        LOG.info("Server started, listening on " + GrpcPort.DEFAULT);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             // Use stderr here since the logger may have been reset by its JVM shutdown hook.
             System.err.println("*** shutting down gRPC server since JVM is shutting down");

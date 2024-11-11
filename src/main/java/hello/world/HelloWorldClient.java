@@ -17,7 +17,7 @@ public class HelloWorldClient {
     private static final Logger LOG = Logger.getLogger(HelloWorldClient.class.getName());
 
     // Access a service running on the local machine on port 50051
-    private static final String TARGET = "localhost:" + GrpcPort.STRING_VALUE;
+    private static final String TARGET = "localhost:" + GrpcPort.DEFAULT;
 
     private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
