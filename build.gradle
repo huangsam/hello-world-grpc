@@ -14,8 +14,8 @@ repositories {
     mavenLocal()
 }
 
-def grpcVersion = '1.68.1'
-def protobufVersion = '4.28.3'
+def grpcVersion = '1.70.0'
+def protobufVersion = '4.29.3'
 def protocVersion = protobufVersion
 
 dependencies {
